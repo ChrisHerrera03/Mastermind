@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Mastermind</title>
+        <link rel="stylesheet" type="text/css" href="..\Css\style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <link rel="icon" href="..\Immagini\sfondo.jpg" type="image/gif" sizes="16x16">
+    </head>
+    <body onload = "gioco()" > <!----creazioneTabella(8,4)-->
+        <div id = "navbar" class="sconfitta">
+            <h1>Mastermind</h1>
+            <img src="..\Immagini\impostazioni.gif" class = "non_visibile" id = "imp" onclick="ApriChiudi('impostazioni')" title = "Apri/Chiudi Impostazioni">
+            <img src="..\Immagini\istruzioni.png" class = "non_visibile" id = "istr" onclick="ApriChiudi('regole')" title = "Apri/Chiudi Istruzioni">
+        </div>
+        <div id = "sottotitolo" class ="sconfitta_sottotitolo">
+        </div>
+        <div class = "contenitori_vari">
+            <div id = "impostazioni" class = "non_visibile">
+                <img src = "..\Immagini\x.png" class = "x" onclick="ApriChiudi('impostazioni')">
+                <center><h3>Impostazioni</h3></center>
+                <h5>Modalità di gioco :</h5>
+                <div>
+                    <input type = "radio" class="p" id = "F" name = "scelta" value="facile" checked onclick = "impostazioni('F')">     
+                    <label for = "facile">Facile</label>
+                </div>
+                <div>
+                    <input type = "radio" class="p" id = "M" name = "scelta" value=" media"  onclick = "impostazioni('M')">   
+                    <label for = "Media">Media</label>
+                </div>
+                <div>
+                    <input type = "radio" class="p" id = "D" name = "scelta" value="difficile" onclick = "impostazioni('D')">     
+                    <label for = "dificile">Difficile</label>
+                </div>
+                <h5>Controllo automatico</h5>
+                <div>
+                    <input type = "checkbox" class="p" id = "ctrl" onclick = "attivareControllo()">    
+                    <span id = "control">Disattivo</span>
+                </div>
+                
+            </div>
+            <div id = "utente" >
+                <center><h3>Creazione Giocatore</h3></center>
+                
+                <div><p class="caselle">Nome</p><input type="text" id = 'ricevimentoNome' maxlength="11" spellcheck = false></div>
+                <div><p class="caselle">Cognome</p><input type="text" id = "ricevimentoCognome" maxlength="10" spellcheck = false></div>
+                <div><p class="caselle">Nome utente</p><input type="text" id = "nU" maxlength="12" spellcheck = false></div>
+                <div id= "messaggioErrore" class="non_visibile"><h3>Nome Utente NON VALIDO</h3>
+                </div>
+                <div id="accedi" onclick = "accedi()">Crea Utente</div>
+            </div>
+            <div id = "avvioGioco" class = "finePartita non_visibile">
+                <u><h3>ATTENZIONE !</h3></u><br>
+                <p>PER TENERE D'OCCHIO I RISULTATI DEL GIOCO, CREA UN PROFILO NELLA SEZIONE 'CREAZIONE GIOCATORE'</p>
+                <div class = "bottoneFinePartita" onclick="ApriChiudi('avvioGioco')"> CAPITO </div>
+            </div>
+            <div id = "vinto" class = "finePartita non_visibile">
+                <p>CONGRATULAZIONI <span id = "nU1" onclick = 'profilo()'></span><br>HAI VINTO!</p>
+                <div class = "bottoneFinePartita" onclick="prosegui('vinto')"> Prosegui </div>
+                <div class = "bottoneFinePartita" onclick="riprova('vinto')"> Riprova </div>
+                <div class = "bottoneFinePartita" onclick="mostraTentativi('vinto',0)"> Controlla </div>
+            </div>
+            <div id = "perso" class = "finePartita non_visibile">
+                <p>SEI SCARSO FORTE <span id = "nU2" onclick = 'profilo()'></span>, <br> HAI PERSO</p>
+                <div class = "bottoneFinePartita" onclick="riprova('perso')"> Riprova </div>
+                <div class = "bottoneFinePartita" onclick="mostraTentativi('perso',1)"> Controlla </div>
+            </div>
+        </div>
+        <div class = "contenitori_vari">
+            <div id = "regole" class = "non_visibile">
+                <h3>Regole</h3><img src = "..\Immagini\x.png" class = "x" onclick="ApriChiudi('regole')">
+                    <p>
+                        All'inizio il codificatore posiziona X pioli colorati nei fori appositi, usando una qualsiasi combinazione dei X colori e senza farsi vedere dal decifratore. Quest'ultimo, di volta in volta, compone una combinazione, che sarà lasciata sulla tabella, posizionando i suoi pioli colorati. Il codificatore da le informazioni utilizzando i pioli chiave in questo modo:
+                        piolo bianco: indica che un colore è esatto ma nella posizione sbagliata
+                        piolo nero: indica che un colore è esatto e nella posizione corretta
+                        I pioli chiavi vengono collocati in una qualsiasi posizione.
+                    </p>
+            </div>
+            <div id = "profile" class = "non_visibile">
+                <center><h3 class = "mexUtente">Profilo</h3></center>
+                <div><p class = "mexUtente">Nome : </p><span id = "name"></span></div>
+                <div><p class = "mexUtente">Cognome : </p><span id = "surname"></span></div>
+                <div><p class = "mexUtente">Nome utente : </p><span id = "Username"></span></div>
+                <div><p class = "mexUtente">Partite totali : <span id = "partTot"></span> (<span id="partVinte"></span>/<span id="partPerse"></span>)</p></div>
+            </div>
+        </div>        
+        <div id = "contenitore">
+            <h3>Combinazione segreta</h3>
+            <div id = "combinazioneSegreta">
+            </div>
+            <h3>Tentativi: <span id = "tentativi"></span></h3>
+            <div id = "sezionePalline">
+            </div>    
+            <h3>Colori disponbili</h3>
+            <div id = "coloriScelti">
+            </div>
+            <div id="check" class = "bottone nv"  ondragstart='return false' onselectstart='return false' onclick = "controllo()">Controlla</div>   
+            <div class = "bottone alternativi nv" id = "bottoneProsegAlternativo" onclick="prosegui('vinto')"> Prosegui </div>
+            <div class = "bottone alternativi nv" id = "bottoneRiprovaAlternativo" onclick="riprova('perso')"> Riprova </div>
+        </div>  
+        <script src = "..\Javascript\mastermind.js"></script>
+    </body>
+</html>
